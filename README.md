@@ -303,7 +303,7 @@ The image passed the dimension and brightness checks. The blur heuristic reporte
 
 OCR successfully extracted text from the image, but the extracted text contained significant non-number-plate content. No candidate confidently matched the configured Indian vehicle-number format, so the system returned a warning instead of incorrectly claiming a valid registration number.
 
-![Sample 01 Result](screenshots/sample-01-results.png)
+![Sample 01 Result](screenshots/sample-01-live-results.png)
 
 ### Sample 02
 
@@ -328,7 +328,7 @@ The image passed the dimension and brightness checks and was not classified as a
 
 OCR produced usable text, but no candidate confidently matched the configured Indian registration-number pattern. The system therefore reports uncertainty rather than treating noisy OCR output as a valid vehicle number.
 
-![Sample 02 Result](screenshots/sample-02-results.png)
+![Sample 02 Result](screenshots/sample-02-live-results.png)
 
 ### Sample 03
 
@@ -353,7 +353,7 @@ OCR successfully detected substantial text in this image, including timestamp/lo
 
 No candidate confidently satisfied the configured Indian vehicle-number format, so the result was marked for review.
 
-![Sample 03 Result](screenshots/sample-03-results.png)
+![Sample 03 Result](screenshots/sample-03-live-results.png)
 
 ### Result Interpretation
 
