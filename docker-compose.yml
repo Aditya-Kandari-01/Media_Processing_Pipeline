@@ -1,0 +1,66 @@
+services:
+  api:
+    build: .
+    command: npm run api
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      MONGO_URI: mongodb://mongo:27017/media_pipeline
+      REDIS_URL: redis://redis:6379
+      UPLOAD_DIR: /app/storage
+      OCR_ENABLED: "true"
+      WORKER_CONCURRENCY: 2
+    volumes:
+      - ./storage:/app/storage
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build: .
+    command: npm run worker
+    environment:
+      NODE_ENV: development
+      MONGO_URI: mongodb://mongo:27017/media_pipeline
+      REDIS_URL: redis://redis:6379
+      UPLOAD_DIR: /app/storage
+      OCR_ENABLED: "true"
+      WORKER_CONCURRENCY: 2
+    volumes:
+      - ./storage:/app/storage
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  mongo:
+    image: mongo:8
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.adminCommand({ ping: 1 }).ok' | grep 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    image: redis:8-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+volumes:
+  mongo_data:
