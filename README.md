@@ -4,11 +4,17 @@ Backend + AI engineering take-home assignment implementation for asynchronous ve
 
 ## Live Deployment
 
-**API Base URL:** `TO_BE_ADDED_AFTER_DEPLOYMENT`
+**API Base URL:** `https://media-processing-api-pmqi.onrender.com`
 
-**Health Check:** `TO_BE_ADDED_AFTER_DEPLOYMENT/health`
+**Health Check:** `https://media-processing-api-pmqi.onrender.com/health`
 
-> The deployed service uses the same asynchronous API → Redis/BullMQ → Worker → MongoDB processing architecture documented below.
+> The deployed free-tier setup runs the API and BullMQ worker in the same Render service. The processing remains asynchronous through Redis/Valkey. In production, the API and worker would be deployed as separate independently scalable services.
+
+### Deployment Note
+
+For the live free-tier deployment, the Express API and BullMQ worker run inside a single Render service because the free plan limits the number of services available for this submission. The worker still consumes jobs asynchronously through Redis/Valkey.
+
+Uploaded images are stored in MongoDB GridFS rather than local disk so the storage layer remains shared and durable across processing stages. In a production deployment, the API and worker would be separated into independent services and object storage such as S3/GCS would be preferred.
 
 ## What this demonstrates
 
