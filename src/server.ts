@@ -5,6 +5,9 @@ import { logger } from './utils/logger.js';
 import { mediaQueue } from './queue/media.queue.js';
 
 await connectDatabase();
+if (process.env.RUN_WORKER_IN_API === 'true') {
+  await import('./worker.js');
+}
 
 const app = createApp();
 const server = app.listen(env.PORT, () => logger.info({ port: env.PORT }, 'api server started'));
