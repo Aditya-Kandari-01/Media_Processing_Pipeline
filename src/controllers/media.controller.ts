@@ -1,8 +1,8 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import { promises as fs } from 'node:fs';
+
 import { Media } from '../models/media.js';
 import { createProcessingId } from '../utils/id.js';
-import { saveUpload } from '../services/storage.js';
+import { saveUpload, deleteStoredFile } from '../services/storage.js';
 import { enqueueMediaAnalysis } from '../queue/media.queue.js';
 
 const ALLOWED_MIME_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/tiff']);
@@ -36,7 +36,7 @@ export async function uploadMedia(req: Request, res: Response, next: NextFunctio
       await enqueueMediaAnalysis(processingId);
     } catch (queueError) {
       await Media.updateOne({ processingId }, { $set: { status: 'failed', failureReason: 'Unable to enqueue analysis job.' } });
-      await fs.rm(stored.path, { force: true });
+      await deleteStoredFile(stored.path);
       throw queueError;
     }
 
